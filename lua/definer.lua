@@ -88,7 +88,7 @@ end
 
 function M.setup(config)
   config = config or {}
-  if config.definitions_file_path then
+  if config.definitions_file then
     M.load_definitions_file(config.definitions_file)
   else
     vim.notify("Definer: definitions_file not found in config!")
