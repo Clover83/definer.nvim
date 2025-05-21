@@ -1,8 +1,16 @@
 # definer.nvim
 Quickly look up words based on a key-value json file
 
+## Installation Instructions
+### Lazy
+```lua
+{
+  "Clover83/definer.nvim"
+}
 
-# Example Usage 
+```
+
+## Example Usage 
 Create a json file:
 ```json
 {
@@ -23,3 +31,8 @@ vim.keymap.set("n", "<leader>tv", ":DefinerReload<CR>", { desc = "Reload definit
 vim.keymap.set("n", "<leader>tv", ":DefinerAdd<CR>", { desc = "Add definiton for word under cursor" })
 ```
 
+
+## TODO
+- [ ] Actual plugin configuration
+- [ ] Dynamically change definitions file
+- [ ] More viewing options, e.g. virtual lines
