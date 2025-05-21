@@ -1,15 +1,12 @@
 local M = {}
 
--- You can change this to load from a JSON or YAML file
--- Example JSON file: {"abc123": "Login Button", "def456": "Search Input"}
-local hash_data = {}
+local definition_data = {}
 local definitions_file_path = nil
 
--- Load from a file (JSON format)
 function M.load_definitions_file(filepath)
   local f = io.open(filepath, "r")
   if not f then
-    print("Could not open hash file: " .. filepath)
+    print("Could not open definitions file: " .. filepath)
     return
   end
   local content = f:read("*all")
@@ -17,17 +14,16 @@ function M.load_definitions_file(filepath)
 
   local ok, parsed = pcall(vim.fn.json_decode, content)
   if ok then
-    hash_data = parsed
+    definition_data = parsed
     M.definitions_file_path = filepath
   else
-    print("Failed to parse hash file")
+    print("Failed to parse definitions file")
   end
 end
 
--- Main function to show popup
-function M.show_hash_info()
+function M.show_definition()
   local word = vim.fn.expand("<cword>")
-  local info = hash_data[word]
+  local info = definition_data[word]
 
   if info then
     local buf = vim.api.nvim_create_buf(false, true)
@@ -45,8 +41,7 @@ function M.show_hash_info()
 
     local win = vim.api.nvim_open_win(buf, false, opts)
 
-    -- Create an autocommand to close the window when cursor moves, buffer changes, etc.
-    local group = vim.api.nvim_create_augroup("HashPopupAutoClose", { clear = true })
+    local group = vim.api.nvim_create_augroup("DefinerPopupAutoClose", { clear = true })
     vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI", "BufLeave", "InsertEnter" }, {
       group = group,
       callback = function()
@@ -68,16 +63,15 @@ function M.add_translation()
     return
   end
 
-  -- Prompt for the translation
-  vim.ui.input({ prompt = "Enter translation for hash '" .. word .. "': " }, function(input)
+  vim.ui.input({ prompt = "Enter translation for word '" .. word .. "': " }, function(input)
     if input and input ~= "" then
-      hash_data[word] = input
+      definition_data[word] = input
 
       -- Save back to file
       if M.definitions_file_path then
         local f = io.open(M.definitions_file_path , "w")
         if f then
-          f:write(vim.fn.json_encode(hash_data))
+          f:write(vim.fn.json_encode(definition_data))
           f:close()
           print("Saved translation for '" .. word .. "' to file.")
         else
@@ -100,7 +94,7 @@ function M.setup(config)
     vim.notify("Definer: definitions_file not found in config!")
   end
 
-  vim.api.nvim_create_user_command("DefinerPopup", M.show_hash_info, {})
+  vim.api.nvim_create_user_command("DefinerPopup", M.show_definition, {})
   vim.api.nvim_create_user_command("DefinerAdd", M.add_translation, {})
   vim.api.nvim_create_user_command("DefinerReload", function ()
     config = config or {}
