@@ -20,6 +20,7 @@ Create a json file:
 }
 ```
 
+Add to your config:
 ```lua
 require("definer").setup({
   definitions_file = "/path/to/my/definitions.json"
@@ -28,7 +29,7 @@ require("definer").setup({
 -- Optional keybind
 vim.keymap.set("n", "<C-k>", ":DefinerPopup<CR>", { desc = "Show definition popup" })
 vim.keymap.set("n", "<leader>tv", ":DefinerReload<CR>", { desc = "Reload definitions file" })
-vim.keymap.set("n", "<leader>tv", ":DefinerAdd<CR>", { desc = "Add definiton for word under cursor" })
+vim.keymap.set("n", "<leader>ta", ":DefinerAdd<CR>", { desc = "Add definiton for word under cursor" })
 ```
 
 
@@ -36,3 +37,4 @@ vim.keymap.set("n", "<leader>tv", ":DefinerAdd<CR>", { desc = "Add definiton for
 - [ ] Actual plugin configuration
 - [ ] Dynamically change definitions file
 - [ ] More viewing options, e.g. virtual lines
+- [ ] Telescope support
