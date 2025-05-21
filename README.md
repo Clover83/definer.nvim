@@ -13,11 +13,12 @@ Create a json file:
 ```
 
 ```lua
-require("hash_popup").setup({
-  hash_file = "/path/to/your/hashes.json"
+require("transval").setup({
+  transval_file = "/path/to/my/translation.json"
 })
 
 -- Optional keybind
-vim.keymap.set("n", "<leader>hh", ":ShowHashInfo<CR>", { desc = "Show hash popup" })
+vim.keymap.set("n", "<C-k>", ":TransvalPopup<CR>", { desc = "Show hash popup" })
+vim.keymap.set("n", "<leader>tv", ":TransvalReload<CR>", { desc = "Reload translation file" })
 ```
 
