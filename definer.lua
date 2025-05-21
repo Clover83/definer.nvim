@@ -3,10 +3,10 @@ local M = {}
 -- You can change this to load from a JSON or YAML file
 -- Example JSON file: {"abc123": "Login Button", "def456": "Search Input"}
 local hash_data = {}
-local transval_file_path = nil
+local definitions_file_path = nil
 
 -- Load from a file (JSON format)
-function M.load_transval_file(filepath)
+function M.load_definitions_file(filepath)
   local f = io.open(filepath, "r")
   if not f then
     print("Could not open hash file: " .. filepath)
@@ -18,7 +18,7 @@ function M.load_transval_file(filepath)
   local ok, parsed = pcall(vim.fn.json_decode, content)
   if ok then
     hash_data = parsed
-    M.transval_file_path = filepath
+    M.definitions_file_path = filepath
   else
     print("Failed to parse hash file")
   end
@@ -74,14 +74,14 @@ function M.add_translation()
       hash_data[word] = input
 
       -- Save back to file
-      if M.transval_file_path then
-        local f = io.open(M.transval_file_path, "w")
+      if M.definitions_file_path then
+        local f = io.open(M.definitions_file_path , "w")
         if f then
           f:write(vim.fn.json_encode(hash_data))
           f:close()
           print("Saved translation for '" .. word .. "' to file.")
         else
-          print("Failed to open file for writing: " .. M.transval_file_path)
+          print("Failed to open file for writing: " .. M.definitions_file_path )
         end
       else
         print("No file path set. Cannot save persistently.")
@@ -94,20 +94,20 @@ end
 
 function M.setup(config)
   config = config or {}
-  if config.transval_file then
-    M.load_transval_file(config.transval_file)
+  if config.definitions_file_path then
+    M.load_definitions_file(config.definitions_file)
   else
-    vim.notify("Transval: transval_file not found in config!")
+    vim.notify("Definer: definitions_file not found in config!")
   end
 
-  vim.api.nvim_create_user_command("TransvalPopup", M.show_hash_info, {})
-  vim.api.nvim_create_user_command("TransvalAdd", M.add_translation, {})
-  vim.api.nvim_create_user_command("TransvalReload", function ()
+  vim.api.nvim_create_user_command("DefinerPopup", M.show_hash_info, {})
+  vim.api.nvim_create_user_command("DefinerAdd", M.add_translation, {})
+  vim.api.nvim_create_user_command("DefinerReload", function ()
     config = config or {}
-    if config.transval_file then
-      M.load_transval_file(config.transval_file)
+    if config.definitions_file then
+      M.load_definitions_file(config.definitions_file)
     else
-      vim.notify("Transval: transval_file not found in config!")
+      vim.notify("Definer: definitions_file not found in config!")
     end
   end, {})
 end
