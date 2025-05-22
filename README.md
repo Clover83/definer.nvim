@@ -1,6 +1,9 @@
 # definer.nvim
 Quickly look up words based on a key-value json file
 
+
+![image](https://github.com/user-attachments/assets/04185979-2bc3-4611-b5f2-1839abb71a82)
+
 ## Installation Instructions
 ### Lazy
 ```lua
@@ -38,3 +41,4 @@ vim.keymap.set("n", "<leader>ta", ":DefinerAdd<CR>", { desc = "Add definiton for
 - [ ] Dynamically change definitions file
 - [ ] More viewing options, e.g. virtual lines
 - [ ] Telescope support
+- [ ] Fix popup scrolling issue
